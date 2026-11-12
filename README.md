@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/logo.svg" width="88" alt="voxnet logo"/>
+</p>
+
 # voxnet
 
 High-performance multiplayer state replication, snapshot interpolation, client-side prediction, server reconciliation (rollback), and RPC netcode for Dart.
