@@ -87,7 +87,12 @@ class ByteReader {
   final ByteData _view;
   int _offset = 0;
 
-  ByteReader(this._bytes) : _view = ByteData.view(_bytes.buffer, _bytes.offsetInBytes, _bytes.lengthInBytes);
+  ByteReader(this._bytes)
+    : _view = ByteData.view(
+        _bytes.buffer,
+        _bytes.offsetInBytes,
+        _bytes.lengthInBytes,
+      );
 
   int get offset => _offset;
   int get remaining => _bytes.length - _offset;
@@ -189,11 +194,8 @@ class FloatQuantizer {
   final double max;
   final int maxInt;
 
-  FloatQuantizer({
-    required this.min,
-    required this.max,
-    int bits = 16,
-  }) : maxInt = (1 << bits) - 1;
+  FloatQuantizer({required this.min, required this.max, int bits = 16})
+    : maxInt = (1 << bits) - 1;
 
   int quantize(double value) {
     final clamped = value.clamp(min, max);

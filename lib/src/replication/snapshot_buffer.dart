@@ -29,10 +29,12 @@ class SnapshotBuffer<T> {
     if (_snapshots.isNotEmpty && snapshot.tick <= _snapshots.last.tick) {
       // Find insertion point to maintain ascending tick order
       var insertIdx = 0;
-      while (insertIdx < _snapshots.length && _snapshots[insertIdx].tick < snapshot.tick) {
+      while (insertIdx < _snapshots.length &&
+          _snapshots[insertIdx].tick < snapshot.tick) {
         insertIdx++;
       }
-      if (insertIdx < _snapshots.length && _snapshots[insertIdx].tick == snapshot.tick) {
+      if (insertIdx < _snapshots.length &&
+          _snapshots[insertIdx].tick == snapshot.tick) {
         // Replace existing tick snapshot
         _snapshots[insertIdx] = snapshot;
         return;
@@ -74,7 +76,8 @@ class SnapshotBuffer<T> {
       final s0 = _snapshots[i];
       final s1 = _snapshots[i + 1];
 
-      if (s0.timestampMs <= targetTimestampMs && targetTimestampMs <= s1.timestampMs) {
+      if (s0.timestampMs <= targetTimestampMs &&
+          targetTimestampMs <= s1.timestampMs) {
         final duration = s1.timestampMs - s0.timestampMs;
         if (duration <= 0) return s1.state;
         final alpha = (targetTimestampMs - s0.timestampMs) / duration;

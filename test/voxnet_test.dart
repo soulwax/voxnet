@@ -48,7 +48,10 @@ void main() {
       MessageRegistry.register(PingMsg.kTypeId, PingMsg.deserialize);
       MessageRegistry.register(PongMsg.kTypeId, PongMsg.deserialize);
       MessageRegistry.register(InputMsg.kTypeId, InputMsg.deserialize);
-      MessageRegistry.register(EntitySnapshotMsg.kTypeId, EntitySnapshotMsg.deserialize);
+      MessageRegistry.register(
+        EntitySnapshotMsg.kTypeId,
+        EntitySnapshotMsg.deserialize,
+      );
       MessageRegistry.register(RpcMsg.kTypeId, RpcMsg.deserialize);
     });
 
@@ -154,7 +157,8 @@ void main() {
       // Snapshot at t=100ms, val=100.0
       buffer.add(const Snapshot(tick: 1, timestampMs: 100, state: 100.0));
 
-      double lerp(double from, double to, double alpha) => from + (to - from) * alpha;
+      double lerp(double from, double to, double alpha) =>
+          from + (to - from) * alpha;
 
       // Sample at t=25ms -> should be 25.0
       final s25 = buffer.sample(25, lerp);
@@ -189,7 +193,8 @@ void main() {
       final result = history.reconcile(
         serverTick: 1,
         authoritativeState: 5.0,
-        hasDiverged: (predicted, authoritative) => (predicted - authoritative).abs() > 0.01,
+        hasDiverged: (predicted, authoritative) =>
+            (predicted - authoritative).abs() > 0.01,
         simulateStep: (current, input, tick) => current + input,
       );
 
@@ -202,24 +207,28 @@ void main() {
       expect(history.latest!.state, equals(25.0));
     });
 
-    test('PredictionHistory does not rollback when predicted state matches server', () {
-      final history = PredictionHistory<double, double>();
+    test(
+      'PredictionHistory does not rollback when predicted state matches server',
+      () {
+        final history = PredictionHistory<double, double>();
 
-      history.record(1, 10.0, 10.0);
-      history.record(2, 10.0, 20.0);
+        history.record(1, 10.0, 10.0);
+        history.record(2, 10.0, 20.0);
 
-      final result = history.reconcile(
-        serverTick: 1,
-        authoritativeState: 10.0, // Matches perfectly!
-        hasDiverged: (predicted, authoritative) => (predicted - authoritative).abs() > 0.01,
-        simulateStep: (current, input, tick) => current + input,
-      );
+        final result = history.reconcile(
+          serverTick: 1,
+          authoritativeState: 10.0, // Matches perfectly!
+          hasDiverged: (predicted, authoritative) =>
+              (predicted - authoritative).abs() > 0.01,
+          simulateStep: (current, input, tick) => current + input,
+        );
 
-      expect(result, isNotNull);
-      expect(result!.rolledBack, isFalse);
-      expect(result.replayedTicksCount, equals(0));
-      expect(result.correctedState, equals(20.0));
-    });
+        expect(result, isNotNull);
+        expect(result!.rolledBack, isFalse);
+        expect(result.replayedTicksCount, equals(0));
+        expect(result.correctedState, equals(20.0));
+      },
+    );
   });
 
   group('voxnet: DeltaCompressor & RPC', () {

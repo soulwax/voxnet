@@ -49,7 +49,8 @@ class PredictionHistory<TState, TInput> {
     required int serverTick,
     required TState authoritativeState,
     required bool Function(TState predicted, TState authoritative) hasDiverged,
-    required TState Function(TState current, TInput input, int tick) simulateStep,
+    required TState Function(TState current, TInput input, int tick)
+    simulateStep,
   }) {
     final serverFrameIdx = _frames.indexWhere((f) => f.tick == serverTick);
 
