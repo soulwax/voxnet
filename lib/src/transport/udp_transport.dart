@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_initializing_formals
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
@@ -51,7 +52,7 @@ class UdpNetTransport implements NetTransport {
   bool _closed = false;
   int _nextAssignedPeerId = 2;
   final int _handshakeSynSentAtMs;
-  int? _serverPeerId;
+  final int? _serverPeerId;
 
   final Map<int, _UdpPeerSession> _peersById = {};
   final Map<String, _UdpPeerSession> _peersByEndpoint = {};
